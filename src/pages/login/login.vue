@@ -5,7 +5,7 @@
       <div class="login-content">
         <input v-model="userName" type="text" name="" placeholder="用户名">
         <input v-model="passWord" type="password" name="" placeholder="密码">
-        <div class="login-btn" @click="checkin">
+        <div ref="loginBtn" class="login-btn" @click="checkUser">
           {{btnText}}
         </div>
       </div>
@@ -28,38 +28,44 @@ export default {
     this.btnText = '登录'
   },
   methods: {
-    checkit () {
-      axios('/api/login').then(this.getUserInfoSucc)
+    checkin () {
+      axios('/api/login').then((res) => {
+        this.getUserInfoSucc(res)
+      })
     },
     getUserInfoSucc (res) {
       res = res.data.data
-      console.log(res)
-      if () {
+      if (this.userName === res.userName && this.passWord === res.passWord) {
+        console.log(this.$refs.loginBtn)
+        this.$refs.loginBtn.disable = true
+        this.btnText = '登录中...'
+        // loginState表示登录状态，1为登录，0为未登录
         this.loginState = 1
         if (localStorage.loginState) {
           localStorage.loginState = this.loginState
         } else {
-          localStorage.setItem("loginState", this.loginState)
+          localStorage.setItem('loginState', this.loginState)
         }
-      }
-      console.log(localStorage.loginState)
-    },
-    checkin () {
-      var validate = this.checkUser()
-      if (validate) {
-        this.btnText = '登录中...'
+        var that = this
+        setTimeout(() => {
+          that.loginState = 0
+          localStorage.loginState = 0
+        }, 300000)
+        window.location.href = 'home'
+      } else {
+        alert('账号或密码错误！请重新输入！')
       }
     },
     checkUser () {
       if (this.userName === '') {
-        console.log('用户名不能为空！')
+        alert('用户名不能为空！')
         return false
       }
       if (this.passWord === '') {
-        console.log('密码不能为空！')
+        alert('密码不能为空！')
         return false
       }
-      this.checkit()
+      this.checkin()
       return true
     }
   }
