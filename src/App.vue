@@ -1,14 +1,12 @@
 <template>
-  <login></login>
+  <div class="body">
+    <router-view></router-view>
+  </div>
 </template>
 <script>
-import Login from './pages/login/login.vue'
 
 export default {
-  name: 'app',
-  components: {
-    Login
-  }
+  name: 'app'
 }
 </script>
 <style lang="stylus">
@@ -16,4 +14,6 @@ export default {
   margin 0
 html,body
   height 100%
+  .body
+    height 100%
 </style>

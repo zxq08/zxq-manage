@@ -51,7 +51,6 @@ export default {
           that.loginState = 0
           localStorage.loginState = 0
         }, 300000)
-        window.location.href = 'home'
       } else {
         alert('账号或密码错误！请重新输入！')
       }
