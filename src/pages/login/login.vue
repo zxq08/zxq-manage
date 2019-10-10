@@ -14,14 +14,15 @@
 </template>
 <script type="text/javascript">
 import axios from 'axios'
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'Login',
   data () {
     return {
       btnText: '登录',
       userName: '',
-      passWord: '',
-      loginState: 0
+      passWord: ''
     }
   },
   create () {
@@ -40,17 +41,11 @@ export default {
         this.$refs.loginBtn.disable = true
         this.btnText = '登录中...'
         // loginState表示登录状态，1为登录，0为未登录
-        this.loginState = 1
-        if (localStorage.loginState) {
-          localStorage.loginState = this.loginState
-        } else {
-          localStorage.setItem('loginState', this.loginState)
-        }
-        var that = this
+        this.$store.dispatch('changeLoginState', 1)
         setTimeout(() => {
-          that.loginState = 0
-          localStorage.loginState = 0
+          this.$store.dispatch('changeLoginState', 0)
         }, 300000)
+        this.$router.push('/home')
       } else {
         alert('账号或密码错误！请重新输入！')
       }
@@ -66,7 +61,8 @@ export default {
       }
       this.checkin()
       return true
-    }
+    },
+    ...mapMutations(['changeLoginState'])
   }
 }
 </script>
@@ -81,7 +77,7 @@ export default {
   .login-body
     width 20%
     color #fff
-    font-size 34px
+    font-size 1.875vw
     text-align center
     .login-content
       margin-top 60px
@@ -90,8 +86,8 @@ export default {
       border-radius 5px
       input
         display block
-        height 36px
-        line-height 36px
+        height 1.875vw
+        line-height 1.875vw
         border-radius 5px
         border 1px solid #aaa
         width 96%
@@ -101,10 +97,10 @@ export default {
         margin-top 20px
         margin-bottom 20px
         width 100%
-        height 36px
-        line-height 36px
+        height 1.875vw
+        line-height 1.875vw
         border-radius 5px
-        font-size 24px
+        font-size 1.25vw
         background-color #20a0ff
         cursor pointer
 </style>
